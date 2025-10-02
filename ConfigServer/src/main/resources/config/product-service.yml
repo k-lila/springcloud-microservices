@@ -13,3 +13,18 @@ spring:
       auto-index-creation: true
 
 application-version: 1.0
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  cloud:
+    config:
+      enabled: false
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27018/product_test_db
+      auto-index-creation: true
