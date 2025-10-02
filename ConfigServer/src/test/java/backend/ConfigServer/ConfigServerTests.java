@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import com.jayway.jsonpath.JsonPath;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ConfigServerApplicationTests {
+class ConfigServerTests {
 
 	@LocalServerPort
 	private int port;

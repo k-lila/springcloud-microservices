@@ -27,7 +27,7 @@ import backend.ClientMicroservice.repository.IClientRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class ClientMicroserviceApplicationTests {
+class ClientControllerTests {
     
     @Autowired
 	private MongoTemplate mongoTemplate;

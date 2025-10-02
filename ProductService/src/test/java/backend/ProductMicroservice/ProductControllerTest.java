@@ -29,7 +29,7 @@ import backend.ProductMicroservice.repository.IProductRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class ProductMicrosserviceApplicationTest {
+class ProductControllerTest {
 
     @Autowired
     private MongoTemplate mongoTemplate;
