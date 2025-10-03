@@ -8,9 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-@Document(collection = "stock")
 @Getter
 @Setter
+@Document(collection = "stock")
 public class Stock {
 
     @Id

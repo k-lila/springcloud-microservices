@@ -66,15 +66,15 @@ public class StockController {
         return ResponseEntity.ok(registerStock.updateQuantity(productId, quantity));
     }
 
+    @GetMapping("/product/{productId}/isEnough")
+    public ResponseEntity<Boolean> isEnough(@PathVariable String productId, @RequestParam Integer quantity) {
+        return ResponseEntity.ok(searchStock.isEnough(productId, quantity));
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> removeStock(@PathVariable(value = "id") String id) {
         registerStock.deleteStock(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/product/{productId}/isEnough")
-    public ResponseEntity<Boolean> isEnough(@PathVariable String productId, @RequestParam Integer quantity) {
-        return ResponseEntity.ok(searchStock.isEnough(productId, quantity));
     }
 
 }
