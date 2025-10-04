@@ -32,7 +32,7 @@ public class UpdateSaleStatus {
         return saleRepository.save(sale);
     }
 
-    public Sale finalizeSale(String saleId) {
+    public Sale closeSale(String saleId) {
         Sale sale = validateSale(saleId);
 		if (sale.getStatus() == SaleStatus.INICIADA) {
             for (ProductQuantity product : sale.getProductList()) {

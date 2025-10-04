@@ -13,6 +13,7 @@ import backend.SaleMicroservice.domain.Sale;
 import backend.SaleMicroservice.dto.ProductDTO;
 import backend.SaleMicroservice.dto.ProductQuantityDTO;
 import backend.SaleMicroservice.dto.SaleRequestDTO;
+import backend.SaleMicroservice.exception.DomainEntityNotFound;
 import backend.SaleMicroservice.repository.ISaleRepository;
 import feign.FeignException;
 
@@ -47,7 +48,7 @@ public class RegisterSale {
         try {
             productClient.getProductByCode(productCode);
         } catch (FeignException.NotFound e) {
-            throw new RuntimeException("PRODUTO NÃO ENCONTRADO");
+            throw new RuntimeException("PRODUTO NÃO ENCONTRADO: " + productCode);
         }
     }
 
@@ -78,7 +79,7 @@ public class RegisterSale {
     }
 
     public Sale addProduct(String saleId, String productCode, Integer quantity) {
-        Sale requestSale = saleRepository.findById(saleId).orElseThrow(() -> new RuntimeException("VENDA NÃO ENCONTRADA: " + saleId));
+        Sale requestSale = saleRepository.findById(saleId).orElseThrow(() -> new DomainEntityNotFound(Sale.class, "id", saleId));
         requestSale.validateStatus();
         validateProduct(productCode);
         ProductDTO productDTO = productClient.getProductByCode(productCode);
@@ -105,7 +106,7 @@ public class RegisterSale {
     }
 
     public Sale removeProduct(String saleId, String productCode, Integer quantity) {
-        Sale requestSale = saleRepository.findById(saleId).orElseThrow(() -> new RuntimeException("VENDA NÃO ENCONTRADA: " + saleId));
+        Sale requestSale = saleRepository.findById(saleId).orElseThrow(() -> new DomainEntityNotFound(Sale.class, "id", saleId));
         requestSale.validateStatus();
         validateProduct(productCode);
         ProductDTO productDTO = productClient.getProductByCode(productCode);
@@ -116,6 +117,13 @@ public class RegisterSale {
         removeProduct.setQuantity(quantity);
         requestSale.removeProduct(removeProduct);
         requestSale.recalculateTotalPrice();
+        Sale updatedSale = saleRepository.save(requestSale);
+        return updatedSale;
+    }
+
+    public Sale removeAll(String saleId) {
+        Sale requestSale = saleRepository.findById(saleId).orElseThrow(() -> new DomainEntityNotFound(Sale.class, "id", saleId));
+        requestSale.removeAll();
         Sale updatedSale = saleRepository.save(requestSale);
         return updatedSale;
     }

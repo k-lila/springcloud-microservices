@@ -44,7 +44,7 @@ public class StockControllerTests {
         registerStock = new RegisterStock(stockRepository, productClientMock);
         searchStock = new SearchStock(stockRepository);
         stockController = new StockController(registerStock, searchStock);
-        mockProduct = createProductDTO("mock");
+        ProductDTO mockProduct = createProductDTO("mock");
         Mockito.when(productClientMock.getProductById("mock")).thenReturn(mockProduct);
     }
 

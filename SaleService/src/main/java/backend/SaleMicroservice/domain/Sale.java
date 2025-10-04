@@ -78,11 +78,6 @@ public class Sale {
         this.totalPrice = total;
     }
 
-    public Integer getProductQuantity() {
-        Integer total = productList.stream().reduce(0, (partial, product) -> partial + product.getQuantity(), Integer::sum);
-        return total;
-    }
-
     public void addProduct(ProductQuantity productQuantity) {
         validateStatus();
         Optional<ProductQuantity> optional = productList.stream().filter((f) -> f.getProductId().equals(productQuantity.getProductId())).findAny();
@@ -97,6 +92,7 @@ public class Sale {
     }
 
     public void removeProduct(ProductQuantity productQuantity) {
+        validateStatus();
         Optional<ProductQuantity> optional = productList.stream().filter((f) -> f.getProductId().equals(productQuantity.getProductId())).findAny();
         if (optional.isPresent()) {
             ProductQuantity _productQuantity = optional.get();

@@ -36,7 +36,7 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<SaleResponseDTO> createSale(@RequestBody SaleRequestDTO request) {
+    public ResponseEntity<SaleResponseDTO> registerSale(@RequestBody SaleRequestDTO request) {
         Sale sale = registerSale.registerSale(request);
         return ResponseEntity.ok(SaleResponseDTO.fromEntity(sale));
     }
@@ -56,38 +56,43 @@ public class SaleController {
             @PathVariable String id,
             @RequestParam String productCode,
             @RequestParam Integer quantity) {
-        
         Sale sale = registerSale.removeProduct(id, productCode, quantity);
         return ResponseEntity.ok(SaleResponseDTO.fromEntity(sale));
     }
 
+    @PutMapping("/{id}/removeAll")
+    public ResponseEntity<SaleResponseDTO> removeAll(@PathVariable String id) {
+        Sale sale = registerSale.removeAll(id);
+        return ResponseEntity.ok(SaleResponseDTO.fromEntity(sale));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<SaleResponseDTO> getSaleById(@PathVariable String id) {
-        Sale sale = searchSale.findById(id);
+    public ResponseEntity<SaleResponseDTO> searchById(@PathVariable String id) {
+        Sale sale = searchSale.searchById(id);
         return ResponseEntity.ok(SaleResponseDTO.fromEntity(sale));
     }
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<SaleResponseDTO> getSaleByCode(@PathVariable String code) {
-        Sale sale = searchSale.findByCode(code);
+    public ResponseEntity<SaleResponseDTO> searchByCode(@PathVariable String code) {
+        Sale sale = searchSale.searchByCode(code);
         return ResponseEntity.ok(SaleResponseDTO.fromEntity(sale));
     }
 
     @GetMapping("/client/{id}")
-    public ResponseEntity<Page<SaleResponseDTO>> getSaleByClient(@PathVariable String id, Pageable pageable) {
-        Page<Sale> clientSales = searchSale.findByClient(id, pageable);
+    public ResponseEntity<Page<SaleResponseDTO>> searchByClient(@PathVariable String id, Pageable pageable) {
+        Page<Sale> clientSales = searchSale.searchByClient(id, pageable);
         return ResponseEntity.ok(clientSales.map(SaleResponseDTO::fromEntity));
     }
 
     @GetMapping
-    public ResponseEntity<Page<SaleResponseDTO>> getAllSales(Pageable pageable) {
+    public ResponseEntity<Page<SaleResponseDTO>> searchAllSales(Pageable pageable) {
         Page<Sale> sales = searchSale.searchAll(pageable);
         return ResponseEntity.ok(sales.map(SaleResponseDTO::fromEntity)); 
     }
 
     @PutMapping("/{id}/checkout")
-    public ResponseEntity<SaleResponseDTO> finalizeSale(@PathVariable String id) {
-        Sale sale = updateSaleStatus.finalizeSale(id);
+    public ResponseEntity<SaleResponseDTO> closeSale(@PathVariable String id) {
+        Sale sale = updateSaleStatus.closeSale(id);
         return ResponseEntity.ok(SaleResponseDTO.fromEntity(sale));
     }
 
