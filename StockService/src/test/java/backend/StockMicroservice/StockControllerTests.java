@@ -22,9 +22,11 @@ import backend.StockMicroservice.controller.StockController;
 import backend.StockMicroservice.domain.Stock;
 import backend.StockMicroservice.dto.ProductDTO;
 import backend.StockMicroservice.exception.DomainEntityNotFound;
+import backend.StockMicroservice.exception.ExternalServiceException;
 import backend.StockMicroservice.repository.IStockRepository;
 import backend.StockMicroservice.service.RegisterStock;
 import backend.StockMicroservice.service.SearchStock;
+import feign.FeignException;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -150,4 +152,12 @@ public class StockControllerTests {
         });
     }
 
+    @Test
+    void ExternalServiceExceptionTest() {
+        Mockito.when(productClientMock.getProductById("inexistente")).thenThrow(FeignException.class);
+        assertThrows(ExternalServiceException.class, () -> {
+            Stock stock = new Stock("inexistente", 10);
+            stockController.registerStock(stock);
+        });
+    }
 }

@@ -28,10 +28,12 @@ import backend.SaleMicroservice.dto.ProductDTO;
 import backend.SaleMicroservice.dto.SaleRequestDTO;
 import backend.SaleMicroservice.dto.SaleResponseDTO;
 import backend.SaleMicroservice.exception.DomainEntityNotFound;
+import backend.SaleMicroservice.exception.ExternalServiceException;
 import backend.SaleMicroservice.repository.ISaleRepository;
 import backend.SaleMicroservice.service.RegisterSale;
 import backend.SaleMicroservice.service.SearchSale;
 import backend.SaleMicroservice.service.UpdateSaleStatus;
+import feign.FeignException;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -195,6 +197,15 @@ public class SaleControllerTests {
     void DomainEntityNotFoundExceptionTest() {
         assertThrows(DomainEntityNotFound.class, () -> {
             saleController.searchById("inexistente");
+        });
+    }
+
+    @Test
+    void ExternalServiceExceptionTest() {
+        Mockito.when(clientClientMock.getClientById("inexistente")).thenThrow(FeignException.class);
+        Pageable pageable = Pageable.ofSize(1);
+        assertThrows(ExternalServiceException.class, () -> {
+            saleController.searchByClient("inexistente", pageable);
         });
     }
 }

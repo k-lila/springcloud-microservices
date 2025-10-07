@@ -28,7 +28,7 @@ class ConfigServerTests {
 	}
 
 	@Test
-	void isConfigForClientServiceIsAvailable() {
+	void isConfigForClientServiceAvailable() {
 		ResponseEntity<Map> response = restTemplate.getForEntity(
 			"http://localhost:" + port + "/client-service/default",
 			Map.class
