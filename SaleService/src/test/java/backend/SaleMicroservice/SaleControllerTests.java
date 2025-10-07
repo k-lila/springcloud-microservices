@@ -53,7 +53,7 @@ public class SaleControllerTests {
         productClientMock = Mockito.mock(IProductClient.class);
         stockClientMock = Mockito.mock(IStockClient.class);
         registerSale = new RegisterSale(saleRepository, clientClientMock, productClientMock, stockClientMock);
-        searchSale = new SearchSale(saleRepository);
+        searchSale = new SearchSale(saleRepository, clientClientMock);
         updateSaleStatus = new UpdateSaleStatus(saleRepository, stockClientMock);
         saleController = new SaleController(registerSale, searchSale, updateSaleStatus);
     }
@@ -197,10 +197,4 @@ public class SaleControllerTests {
             saleController.searchById("inexistente");
         });
     }
-
-
-
-
-
-
 }

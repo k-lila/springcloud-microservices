@@ -7,7 +7,10 @@ import backend.SaleMicroservice.client.IStockClient;
 import backend.SaleMicroservice.domain.ProductQuantity;
 import backend.SaleMicroservice.domain.Sale;
 import backend.SaleMicroservice.domain.Sale.SaleStatus;
+import backend.SaleMicroservice.exception.DomainEntityNotFound;
+import backend.SaleMicroservice.exception.ExternalServiceException;
 import backend.SaleMicroservice.repository.ISaleRepository;
+import feign.FeignException;
 
 @Service
 public class UpdateSaleStatus {
@@ -20,14 +23,22 @@ public class UpdateSaleStatus {
         this.stockClient = stockClient;
     }
 
-    public Sale validateSale(String saleId) {
+    private Sale validateSale(String saleId) {
         Sale sale = saleRepository.findById(saleId).orElseThrow(
-            () -> new RuntimeException("VENDA NÃO ENCONTRADA, ID: " + saleId)
+            () -> new DomainEntityNotFound(Sale.class, "saleId", saleId)
         );
         return sale;
     }
 
-    public Sale changeStatus(Sale sale, SaleStatus newStatus) {
+    private Boolean checkStock(String productId, Integer quantity) {
+        if (stockClient.isEnough(productId, quantity)) {
+            return true;
+        } else {
+            throw new RuntimeException("ESTOQUE INSUFICIENTE: " + productId);
+        }
+    }
+
+    private Sale changeStatus(Sale sale, SaleStatus newStatus) {
         sale.setStatus(newStatus);
         return saleRepository.save(sale);
     }
@@ -36,11 +47,14 @@ public class UpdateSaleStatus {
         Sale sale = validateSale(saleId);
 		if (sale.getStatus() == SaleStatus.INICIADA) {
             for (ProductQuantity product : sale.getProductList()) {
-                Boolean isEnough = stockClient.isEnough(product.getProductId(), product.getQuantity());
-                if (!isEnough) {
-                    throw new RuntimeException("ESTOQUE INSUFICIENTE, ID: " + product.getProductId());
+                checkStock(product.getProductId(), product.getQuantity());
+            }
+            for (ProductQuantity product : sale.getProductList()) {
+                try {
+                    stockClient.updateQuantity(product.getProductId(), -product.getQuantity());
+                } catch (FeignException e) {
+                    throw new ExternalServiceException("stock-service", e);
                 }
-                stockClient.updateQuantity(product.getProductId(), -product.getQuantity());
             }
         return changeStatus(sale, SaleStatus.FINALIZADA);
         } else {
@@ -52,7 +66,11 @@ public class UpdateSaleStatus {
         Sale sale = validateSale(saleId);
         if (sale.getStatus() == SaleStatus.FINALIZADA) {
             for (ProductQuantity product : sale.getProductList()) {
-                stockClient.updateQuantity(product.getProductId(), product.getQuantity());
+                try {
+                    stockClient.updateQuantity(product.getProductId(), product.getQuantity());
+                } catch (FeignException e) {
+                    throw new ExternalServiceException("stock-service", e);
+                }
             }
             return changeStatus(sale, SaleStatus.CANCELADA);
         } else {
