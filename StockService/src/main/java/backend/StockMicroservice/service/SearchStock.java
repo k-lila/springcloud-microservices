@@ -42,5 +42,4 @@ public class SearchStock {
         Stock stock = stockRepository.findByProductId(productId).orElseThrow(() -> new DomainEntityNotFound(Stock.class, "productId", productId));
         return stock.getQuantity() >= quantity;
     }
-
 }
