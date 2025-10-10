@@ -10,5 +10,77 @@ services:
       - mongo-data:/data/db
     restart: unless-stopped
 
+  config-server:
+    build:
+      context: ./ConfigServer
+      dockerfile: Dockerfile
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - mongo-database
+
+  discovery-server:
+    build:
+      context: ./DiscoveryServer
+      dockerfile: Dockerfile
+    container_name: discovery-server
+    ports:
+      - "9091:9091"
+    depends_on:
+      - config-server
+
+  client-service:
+    build:
+      context: ./ClientService
+      dockerfile: Dockerfile
+    container_name: client-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - config-server
+      - mongo-database
+      - discovery-server
+
+  product-service:
+    build:
+      context: ./ProductService
+      dockerfile: Dockerfile
+    container_name: product-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - config-server
+      - mongo-database
+      - discovery-server
+
+  stock-service:
+    build:
+      context: ./StockService
+      dockerfile: Dockerfile
+    container_name: stock-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - config-server
+      - mongo-database
+      - discovery-server
+      - product-service
+
+  sale-service:
+    build:
+      context: ./SaleService
+      dockerfile: Dockerfile
+    container_name: sale-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - config-server
+      - mongo-database
+      - discovery-server
+      - stock-service
+      - client-service
+      - product-service
+
 volumes:
   mongo-data:

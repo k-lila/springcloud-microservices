@@ -6,24 +6,22 @@ spring:
     name: sale-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/sale_db
+      uri: mongodb://mongo-database:27017/sale_db
       auto-index-creation: true
 
 eureka:
-  instance:
-    hostname: localhost
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:9091/eureka/
+      defaultZone: http://discovery-server:9091/eureka/
 
 client-service:
-  url: http://localhost:8081
+  url: http://client-service:8081
 product-service:
-  url: http://localhost:8082
+  url: http://product-service:8082
 stock-service:
-  url: http://localhost:8083
+  url: http://stock-service:8083
 
 management:
   endpoints:

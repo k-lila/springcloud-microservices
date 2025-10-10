@@ -6,6 +6,10 @@ O banco de dados utilizado é o **MongoDB**, e toda a aplicação pode ser execu
 
 ---
 
+http://localhost:9091/ - Eureka
+
+---
+
 Config Server 8888 — Central de configuração dos microsserviços
 Client Service 8081 http://localhost:8081/swagger-ui.html
 Product Service 8082 http://localhost:8082/swagger-ui.html

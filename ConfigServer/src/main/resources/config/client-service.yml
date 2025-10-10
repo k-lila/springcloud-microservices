@@ -6,7 +6,7 @@ spring:
     name: client-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/client_db
+      uri: mongodb://mongo-database:27017/client_db
       auto-index-creation: true
 
 eureka:
@@ -14,9 +14,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:9091/eureka/
-  instance:
-    hostname: localhost
+      defaultZone: http://discovery-server:9091/eureka/
 
 management:
   endpoints:
