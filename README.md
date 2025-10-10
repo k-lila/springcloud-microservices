@@ -18,4 +18,4 @@ Sale Service 8084 http://localhost:8084/swagger-ui.html
 
 ---
 
-Para os testes, suba o banco de dados com **docker compose up** e o Config Server com **mvn spring-boot: run**
+No terminal, digite: **docker compose up --build**
