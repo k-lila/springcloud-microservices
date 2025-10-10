@@ -10,7 +10,7 @@ http://localhost:9091/ - Eureka
 
 ---
 
-Config Server 8888 — Central de configuração dos microsserviços
+Config Server 8888
 Client Service 8081 http://localhost:8081/swagger-ui.html
 Product Service 8082 http://localhost:8082/swagger-ui.html
 Stock Service 8083 http://localhost:8083/swagger-ui.html
