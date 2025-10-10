@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import backend.SaleMicroservice.dto.ClientDTO;
 
-@FeignClient(name = "client-service", url = "http://localhost:8081")
+@FeignClient(name = "client-service")
 public interface IClientClient {
     @GetMapping("/clients/{id}")
     ClientDTO getClientById(@PathVariable(value = "id") String id);

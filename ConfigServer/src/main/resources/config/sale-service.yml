@@ -1,30 +1,34 @@
 server:
   port: 8084
-  wait-time-in-ms-when-sync-empty: 3000
 
 spring:
-  spring:
-    profiles:
-      active: native
+  application:
+    name: sale-service
   data:
     mongodb:
       uri: mongodb://localhost:27017/sale_db
-      database: sale_db
       auto-index-creation: true
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9091/eureka/
+
+client-service:
+  url: http://localhost:8081
+product-service:
+  url: http://localhost:8082
+stock-service:
+  url: http://localhost:8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 application-version: 1.0
-
----
-spring:
-  config:
-    activate:
-      on-profile: test
-
-  cloud:
-    config:
-      enabled: false
-
-  data:
-    mongodb:
-      uri: mongodb://localhost:27018/sale_test_db
-      auto-index-creation: true

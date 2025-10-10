@@ -59,7 +59,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -76,6 +75,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -88,7 +92,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
 		<plugins>
 			<plugin>

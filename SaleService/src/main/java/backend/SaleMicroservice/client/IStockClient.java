@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "stock-service", url = "http://localhost:8083")
+@FeignClient(name = "stock-service")
 public interface IStockClient {
     @GetMapping("/stocks/product/{productId}/isEnough")
     Boolean isEnough(   

@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: sale-service
+  config:
+    import: optional:configserver:http://localhost:8888
+application-version: 1.0
